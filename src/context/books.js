@@ -3,15 +3,18 @@ import axios from "axios";
 
 const BooksContext = createContext();
 
+const URL = "https://books-backend-ctlt.onrender.com"
+// const URL = "http://localhost:3001"
+
 function Provider({children}) {
     const [books, setBooks] = useState([]);
 
     const fetchBooks = useCallback(async()=> {
-        const response = await axios.get("http://localhost:3001/books");
+        const response = await axios.get(`${URL}/books`);
         setBooks(response.data);
     }, []);
     const editBookById = async(id, newTitle) => {
-        const response = await axios.put(`http://localhost:3001/books/${id}`,{
+        const response = await axios.put(`${URL}/books/${id}`,{
             title: newTitle
         });
         const updatedBooks = books.map((book) => {
@@ -23,14 +26,14 @@ function Provider({children}) {
         setBooks(updatedBooks);
     };
     const deleteBookById = async(id) => {
-        await axios.delete(`http://localhost:3001/books/${id}`)
+        await axios.delete(`${URL}/books/${id}`)
         const updatedBooks = books.filter((book)=> {
             return book.id !== id;
         });
         setBooks(updatedBooks);
     }
     const createBook = async(title) => {
-        const response = await axios.post("http://localhost:3001/books", {
+        const response = await axios.post(`${URL}/books`, {
             title,
         })
         const updatedBooks = [...books,response.data]
